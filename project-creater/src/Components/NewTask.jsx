@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
+import { useRef } from 'react';
+import Modal from './Modal';
+
 
 function NewTask({onAdd}) {
+    const modal = useRef();
 const [enteredTask, setEnteredTask] = useState('');
 
 function handleChange(event) {
@@ -9,12 +13,21 @@ setEnteredTask(event.target.value);
 
 function handleClick() {
     if (enteredTask.trim() === '') {
+        // return;
+        modal.current.open();
         return;
     }
     onAdd(enteredTask)
     setEnteredTask('');
 }
   return (
+    <>
+     <Modal ref={modal} buttonCaption="Okay" >
+ <h2 className='text-xl font-bold text-stone-700 my-4'>Invalid Input</h2>
+ <p className='text-stone-600 mb-4'>Oops... looks like you forgot to enter a value. </p>
+    <p className='text-stone-600 mb-4'>Please make sure you provide a valid value for input field.</p>
+    </Modal>
+
     <div className='flex items-center gap-4'>
         <input 
         type="text"
@@ -28,7 +41,8 @@ function handleClick() {
          >Add Task</button>
       
     </div>
-  )
+    </>
+  );
 }
 
 export default NewTask;
